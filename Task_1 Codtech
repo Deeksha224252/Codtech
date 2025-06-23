@@ -1,0 +1,59 @@
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class FileHandler {
+
+    // Method to write content to a file
+    public static void writeToFile(String filePath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(content);
+            System.out.println("* Successfully written to file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("* Error writing to file: " + e.getMessage());
+        }
+    }
+
+    // Method to read content from a file
+    public static void readFromFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            System.out.println("* Reading file: " + filePath);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(">> " + line);
+            }
+        } catch (IOException e) {
+            System.err.println("* Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method to modify file content (example: replace a word)
+    public static void modifyFile(String filePath, String target, String replacement) {
+        try {
+            Path path = Paths.get(filePath);
+            String content = Files.readString(path);
+            content = content.replaceAll(target, replacement);
+            Files.writeString(path, content);
+            System.out.println("* File modified successfully.");
+        } catch (IOException e) {
+            System.err.println("* Error modifying file: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        String fileName = "codtech.txt";
+
+        // Step 1: Write to file
+        String initialContent = "WELCOME TO CODTECH ......\n we are providing internships to students so please hurry up!!!!!!";
+        writeToFile(fileName, initialContent);
+
+        // Step 2: Read the file
+        readFromFile(fileName);
+
+        // Step 3: Modify the file (replace 'CodTech' with 'CODTECH')
+        modifyFile(fileName, "CodTech", "CODTECH");
+
+        // Step 4: Read the file again to confirm modification
+        readFromFile(fileName);
+    }
+}
